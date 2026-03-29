@@ -4,7 +4,7 @@
 
 <h3>My Tasks</h3>
 
-<table class="table table-bordered">
+<table class="table table-bordered text-center align-middle">
     <tr>
         <th>Title</th>
         <th>Priority</th>
@@ -38,13 +38,13 @@
             @endif
         </td>
         <td>
-            <div class="d-flex align-items-center gap-1">
+            <div class="d-flex align-items-center justify-content-center gap-1">
                 <a href="{{ route('tasks.show', $task) }}" class="btn btn-outline-secondary btn-sm">View</a>
 
                 <form method="POST" action="{{ route('tasks.updateStatus', $task) }}" class="d-flex gap-1">
                     @csrf
                     @method('PATCH')
-                    <select name="status" class="form-select form-select-sm">
+                    <select name="status" class="form-select form-select-sm" style="width: 120px;">
                         <option value="pending" {{ $task->status == 'pending' ? 'selected' : '' }}>Pending</option>
                         <option value="in_progress" {{ $task->status == 'in_progress' ? 'selected' : '' }}>In Progress</option>
                         <option value="complete" {{ $task->status == 'complete' ? 'selected' : '' }}>Complete</option>

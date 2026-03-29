@@ -6,7 +6,7 @@
 
 <a href="{{ route('tasks.create') }}" class="btn btn-primary mb-3">Create Task</a>
 
-<table class="table table-bordered">
+<table class="table table-bordered text-center align-middle">
     <tr>
         <th>Title</th>
         <th>Priority</th>
@@ -42,7 +42,7 @@
         </td>
         <td>{{ $task->assignedTo ? $task->assignedTo->name : '' }}</td> {{-- not all tasks are assigned --}}
         <td>
-            <div class="d-flex gap-1 mb-2">
+            <div class="d-flex align-items-center justify-content-center gap-1 flex-wrap">
                 <a href="{{ route('tasks.show',$task) }}" class="btn btn-outline-secondary btn-sm">View</a>
                 <a href="{{ route('tasks.edit',$task) }}" class="btn btn-outline-primary btn-sm">Edit</a>
 
@@ -51,22 +51,22 @@
                     @method('DELETE')
                     <button class="btn btn-outline-danger btn-sm">Delete</button>
                 </form>
-            </div>
 
-            <form action="{{ route('tasks.assign',$task) }}" method="POST" class="d-flex gap-1">
-                @csrf
-                <select name="user_id" class="form-select form-select-sm">
-                    <option value="">-- Select Staff --</option>
-                    @foreach($staff as $s)
-                        <option value="{{ $s->id }}" {{ $task->assignedTo?->id == $s->id ? 'selected' : '' }}>
-                            {{ $s->name }}
-                        </option>
-                    @endforeach
-                </select>
-                <button class="btn btn-primary btn-sm text-nowrap">
-                    {{ $task->assignedTo ? 'Reassign' : 'Assign' }}
-                </button>
-            </form>
+                <form action="{{ route('tasks.assign',$task) }}" method="POST" class="d-flex gap-1">
+                    @csrf
+                    <select name="user_id" class="form-select form-select-sm" style="width: 120px;">
+                        <option value="">-- Assign --</option>
+                        @foreach($staff as $s)
+                            <option value="{{ $s->id }}" {{ $task->assignedTo?->id == $s->id ? 'selected' : '' }}>
+                                {{ $s->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <button class="btn btn-outline-primary btn-sm text-nowrap">
+                        {{ $task->assignedTo ? 'Reassign' : 'Assign' }}
+                    </button>
+                </form>
+            </div>
         </td>
     </tr>
     @endforeach
