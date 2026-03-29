@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
@@ -13,7 +14,21 @@ class TaskController extends Controller
     public function index()
     {
         $tasks = Task::all();
-        return view('tasks.index', compact('tasks'));
+        $staff = User::where('role','staff')->get();
+
+        return view('tasks.index', compact('tasks','staff'));
+    }
+
+    public function show(Task $task)
+    {
+        if (auth()->user()->role === 'staff') {
+            if ($task->assigned_to != auth()->id()) {
+                abort(403, 'You are not authorized to view this task.');
+            }
+        }
+        // Admin can view all tasks
+
+        return view('tasks.show', compact('task'));
     }
 
     public function create()
@@ -57,7 +72,7 @@ class TaskController extends Controller
             'priority' => 'required|in:low,medium,high',
             'due_date' => 'nullable|date',
             'assigned_to' => 'nullable|exists:users,id',
-            'status' => 'required|in:not_assigned,pending,in_progress,complete',
+            'status' => 'required|in:not_assigned,pending,in_progress,complete', //same as rule::in
         ]);
 
         if (!empty($data['assigned_to']) && $task->assigned_to != $data['assigned_to']) {
