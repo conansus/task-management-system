@@ -20,14 +20,16 @@
         <td>{{ $user->email }}</td>
         <td>{{ strtoupper($user->role) }}</td>
         <td>
-            <a href="{{ route('users.show', $user) }}" class="btn btn-info btn-sm">View</a>
-            <a href="{{ route('users.edit',$user) }}" class="btn btn-warning btn-sm">Edit</a>
+            <div class="d-flex gap-1">
+                <a href="{{ route('users.show', $user) }}" class="btn btn-outline-secondary btn-sm">View</a>
+                <a href="{{ route('users.edit', $user) }}" class="btn btn-outline-primary btn-sm">Edit</a>
 
-            <form action="{{ route('users.destroy',$user) }}" method="POST" style="display:inline">
-                @csrf
-                @method('DELETE')
-                <button class="btn btn-danger btn-sm">Delete</button>
-            </form>
+                <form action="{{ route('users.destroy', $user) }}" method="POST" style="display:inline">
+                    @csrf
+                    @method('DELETE')
+                    <button class="btn btn-outline-danger btn-sm">Delete</button>
+                </form>
+            </div>
         </td>
     </tr>
     @endforeach

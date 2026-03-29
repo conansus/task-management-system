@@ -15,7 +15,17 @@
     @foreach($tasks as $task)
     <tr>
         <td>{{ $task->title }}</td>
-        <td>{{ strtoupper($task->priority) }}</td>
+        <td>
+            @if($task->priority == 'low')
+                <span class="badge bg-success">Low</span>
+            @elseif($task->priority == 'medium')
+                <span class="badge bg-warning">Medium</span>
+            @elseif($task->priority == 'high')
+                <span class="badge bg-danger">High</span>
+            @else
+                <span class="badge bg-secondary">-</span>
+            @endif
+        </td>
         <td>
             @if($task->status == 'pending')
                 <span class="badge bg-warning">Pending</span>
@@ -27,21 +37,21 @@
                 <span class="badge bg-secondary">Not Assigned</span>
             @endif
         </td>
-
         <td>
-            <a href="{{ route('tasks.show', $task) }}" class="btn btn-info btn-sm">View</a>
-            <form method="POST" action="{{ route('tasks.updateStatus',$task) }}">
-                @csrf
-                @method('PATCH')
+            <div class="d-flex align-items-center gap-1">
+                <a href="{{ route('tasks.show', $task) }}" class="btn btn-outline-secondary btn-sm">View</a>
 
-                <select name="status" class="form-control mb-1">
-                    <option value="pending" {{ $task->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                    <option value="in_progress" {{ $task->status == 'in_progress' ? 'selected' : '' }}>In Progress</option>
-                    <option value="complete" {{ $task->status == 'complete' ? 'selected' : '' }}>Complete</option>
-                </select>
-
-                <button class="btn btn-success btn-sm">Update</button>
-            </form>
+                <form method="POST" action="{{ route('tasks.updateStatus', $task) }}" class="d-flex gap-1">
+                    @csrf
+                    @method('PATCH')
+                    <select name="status" class="form-select form-select-sm">
+                        <option value="pending" {{ $task->status == 'pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="in_progress" {{ $task->status == 'in_progress' ? 'selected' : '' }}>In Progress</option>
+                        <option value="complete" {{ $task->status == 'complete' ? 'selected' : '' }}>Complete</option>
+                    </select>
+                    <button class="btn btn-outline-success btn-sm text-nowrap">Update</button>
+                </form>
+            </div>
         </td>
     </tr>
     @endforeach
