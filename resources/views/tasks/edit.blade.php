@@ -42,7 +42,15 @@
         </select>
     </div>
 
-    <button class="btn btn-primary">Update Task</button>
+    <div class="d-flex justify-content-between mt-3">
+        <a href="{{ route('tasks.index') }}" class="btn btn-secondary no-loading">
+            Back
+        </a>
+
+        <button class="btn btn-primary">
+            Update Task
+        </button>
+    </div>
 </form>
 
 @endsection

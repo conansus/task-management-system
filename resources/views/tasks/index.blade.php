@@ -18,7 +18,17 @@
     @foreach($tasks as $task)
     <tr>
         <td>{{ $task->title }}</td>
-        <td>{{ strtoupper($task->priority) }}</td>
+        <td>
+            @if($task->priority == 'low')
+                <span class="badge bg-success">Low</span>
+            @elseif($task->priority == 'medium')
+                <span class="badge bg-warning">Medium</span>
+            @elseif($task->priority == 'high')
+                <span class="badge bg-danger">High</span>
+            @else
+                <span class="badge bg-secondary">-</span>
+            @endif
+        </td>
         <td>
             @if($task->status == 'pending')
                 <span class="badge bg-warning">Pending</span>
@@ -33,7 +43,7 @@
         <td>{{ $task->assignedTo ? $task->assignedTo->name : '' }}</td> {{-- not all tasks are assigned --}}
 
         <td>
-            <a href="{{ route('tasks.show',$task) }}" class="btn btn-warning btn-sm">View</a>
+            <a href="{{ route('tasks.show',$task) }}" class="btn btn-info btn-sm">View</a>
             <a href="{{ route('tasks.edit',$task) }}" class="btn btn-warning btn-sm">Edit</a>
 
             <form action="{{ route('tasks.destroy',$task) }}" method="POST" style="display:inline">

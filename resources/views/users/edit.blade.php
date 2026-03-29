@@ -36,7 +36,15 @@
         </select>
     </div>
 
-    <button class="btn btn-primary">Update User</button>
+    <div class="d-flex justify-content-between mt-3">
+        <a href="{{ route('users.index') }}" class="btn btn-secondary no-loading">
+            Back
+        </a>
+
+        <button class="btn btn-primary">
+            Update User
+        </button>
+    </div>
 </form>
 
 @endsection

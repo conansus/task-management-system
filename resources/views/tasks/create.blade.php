@@ -26,7 +26,15 @@
         @endforeach
     </select>
 
-    <button class="btn btn-success">Create</button>
+   <div class="d-flex justify-content-between mt-3">
+        <a href="{{ route('tasks.index') }}" class="btn btn-secondary no-loading">
+            Back
+        </a>
+
+        <button class="btn btn-success">
+            Create
+        </button>
+    </div>
 </form>
 
 @endsection

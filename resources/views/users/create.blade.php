@@ -18,7 +18,15 @@
         <option value="staff">Staff</option>
     </select>
 
-    <button class="btn btn-success">Save</button>
+    <div class="d-flex justify-content-between mt-3">
+        <a href="{{ route('users.index') }}" class="btn btn-secondary no-loading">
+            Back
+        </a>
+
+        <button class="btn btn-success">
+            Save
+        </button>
+    </div>
 </form>
 
 @endsection
