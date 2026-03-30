@@ -9,9 +9,29 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::orderBy('id', 'desc')->get();
+        $query = User::query();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%")
+                ->orWhere('role', 'like', "%{$search}%");
+            });
+        }
+
+        $sort = $request->input('sort', 'id');
+        $direction = $request->input('direction', 'desc');
+
+        if (in_array($sort, ['name', 'email', 'role', 'id'])) {
+            $query->orderBy($sort, $direction);
+        }
+
+        $users = $query->paginate(5)->withQueryString();
+
         return view('users.index', compact('users'));
     }
 

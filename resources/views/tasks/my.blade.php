@@ -4,11 +4,34 @@
 
 <h3>My Tasks</h3>
 
+<form method="GET" class="mb-3 d-flex gap-2">
+    <input type="text" name="search" value="{{ request('search') }}" 
+        class="form-control" placeholder="Search...">
+    
+    <button type="submit" class="btn btn-secondary">Search</button>
+
+    <a href="{{ route('tasks.my') }}" class="btn btn-danger">
+        Reset
+    </a>
+</form>
+
 <table class="table table-bordered text-center align-middle">
     <tr>
-        <th>Title</th>
-        <th>Priority</th>
-        <th>Status</th>
+        <th>
+            <a href="{{ request()->fullUrlWithQuery(['sort'=>'title','direction'=>request('direction')=='asc'?'desc':'asc']) }}">
+                Title
+            </a>
+        </th>
+        <th>
+            <a href="{{ request()->fullUrlWithQuery(['sort'=>'priority','direction'=>request('direction')=='asc'?'desc':'asc']) }}">
+                Priority
+            </a>
+        </th>
+        <th>
+            <a href="{{ request()->fullUrlWithQuery(['sort'=>'status','direction'=>request('direction')=='asc'?'desc':'asc']) }}">
+                Status
+            </a>
+        </th>
         <th>Action</th>
     </tr>
 
@@ -57,5 +80,9 @@
     @endforeach
 
 </table>
+
+<div class="mt-3">
+    {{ $tasks->links() }}
+</div>
 
 @endsection

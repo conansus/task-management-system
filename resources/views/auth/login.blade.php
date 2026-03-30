@@ -1,26 +1,38 @@
-@extends('layouts.app') 
-{{-- from @yield('content') --}}
+@extends('layouts.app')
+
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-4">
+<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="col-md-6">
 
-        <h3 class="mb-3">Login</h3>
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-body p-4">
 
-        <form method="POST" action="{{ route('login.post') }}">
-            @csrf
+                <h3 class="text-center mb-4 fw-bold">Login</h3>
 
-            <div class="mb-3">
-                <label>Email</label>
-                <input type="email" name="email" class="form-control" required>
+                <form method="POST" action="{{ route('login.post') }}">
+                    @csrf
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Email</label>
+                        <input type="email" name="email" 
+                            class="form-control form-control-lg rounded-3" 
+                            placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Password</label>
+                        <input type="password" name="password" 
+                            class="form-control form-control-lg rounded-3" 
+                            placeholder="Enter your password" required>
+                    </div>
+
+                    <button class="btn btn-primary w-100 py-2 rounded-3 fw-semibold">
+                        Login
+                    </button>
+                </form>
+
             </div>
-
-            <div class="mb-3">
-                <label>Password</label>
-                <input type="password" name="password" class="form-control" required>
-            </div>
-
-            <button class="btn btn-primary w-100">Login</button>
-        </form>
+        </div>
 
     </div>
 </div>

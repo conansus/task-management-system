@@ -10,10 +10,47 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = Task::all();
+        $query = Task::query()->with(['assignedTo', 'assignedBy', 'createdBy']);
+
+        // 🔍 Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                ->orWhere('priority', 'like', "%{$search}%")
+                ->orWhere('status', 'like', "%{$search}%")
+                ->orWhere('due_date', 'like', "%{$search}%")
+
+                ->orWhereHas('assignedTo', function ($q2) use ($search) {
+                    $q2->where('name', 'like', "%{$search}%");
+                })
+                ->orWhereHas('assignedBy', function ($q2) use ($search) {
+                    $q2->where('name', 'like', "%{$search}%");
+                })
+                ->orWhereHas('createdBy', function ($q2) use ($search) {
+                    $q2->where('name', 'like', "%{$search}%");
+                });
+            });
+        }
+
+        $sort = $request->input('sort', 'id');
+        $direction = $request->input('direction', 'asc');
+
+        if (in_array($sort, ['title', 'priority', 'status', 'due_date'])) {
+            $query->orderBy($sort, $direction);
+        }
+
+        if ($sort === 'assignedTo') {
+            $query->leftJoin('users as u1', 'tasks.assigned_to', '=', 'u1.id')
+                ->orderBy('u1.name', $direction)
+                ->select('tasks.*');
+        }
+
+        $tasks = $query->paginate(5)->withQueryString();
+
         $staff = User::where('role','staff')->get();
 
         return view('tasks.index', compact('tasks','staff'));
@@ -110,9 +147,29 @@ class TaskController extends Controller
         return redirect()->route('tasks.index')->with('success', 'Task assigned successfully.');
     }
 
-    public function myTasks()
+    public function myTasks(Request $request)
     {
-        $tasks = Task::where('assigned_to', Auth::user()->id)->orderBy('id','desc')->get();
+        $query = Task::where('assigned_to', Auth::user()->id);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                ->orWhere('priority', 'like', "%{$search}%")
+                ->orWhere('status', 'like', "%{$search}%");
+            });
+        }
+
+        $sort = $request->input('sort', 'id');
+        $direction = $request->input('direction', 'desc');
+
+        if (in_array($sort, ['title', 'priority', 'status', 'id'])) {
+            $query->orderBy($sort, $direction);
+        }
+
+        $tasks = $query->paginate(5)->withQueryString();
+
         return view('tasks.my', compact('tasks'));
     }
 

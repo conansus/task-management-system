@@ -6,11 +6,34 @@
 
 <a href="{{ route('users.create') }}" class="btn btn-primary mb-3">Add User</a>
 
+<form method="GET" class="mb-3 d-flex gap-2">
+    <input type="text" name="search" value="{{ request('search') }}" 
+        class="form-control" placeholder="Search...">
+    
+    <button type="submit" class="btn btn-secondary">Search</button>
+
+    <a href="{{ route('users.index') }}" class="btn btn-danger">
+        Reset
+    </a>
+</form>
+
 <table class="table table-bordered text-center align-middle">
     <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Role</th>
+        <th>
+            <a href="{{ request()->fullUrlWithQuery(['sort'=>'name','direction'=>request('direction')=='asc'?'desc':'asc']) }}">
+                Name
+            </a>
+        </th>
+        <th>
+            <a href="{{ request()->fullUrlWithQuery(['sort'=>'email','direction'=>request('direction')=='asc'?'desc':'asc']) }}">
+                Email
+            </a>
+        </th>
+        <th>
+            <a href="{{ request()->fullUrlWithQuery(['sort'=>'role','direction'=>request('direction')=='asc'?'desc':'asc']) }}">
+                Role
+            </a>
+        </th>
         <th>Action</th>
     </tr>
 
@@ -35,5 +58,9 @@
     @endforeach
 
 </table>
+
+<div class="mt-3">
+    {{ $users->links() }}
+</div>
 
 @endsection
