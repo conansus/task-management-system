@@ -14,11 +14,19 @@
 
 <nav class="navbar navbar-dark bg-dark navbar-expand-lg shadow-sm">
     <div class="container">
-        <div class="navbar-brand fw-bold fs-4" href="#">
+        <!-- Brand / Logo -->
+        <a class="navbar-brand fw-bold fs-4" href="#">
             Task System
-        </div>
+        </a>
 
-        <div class="collapse navbar-collapse">
+        <!-- Hamburger toggle button for mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu" 
+                aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collapsible menu -->
+        <div class="collapse navbar-collapse" id="navbarMenu">
             <ul class="navbar-nav ms-auto align-items-center gap-2">
 
                 @auth
