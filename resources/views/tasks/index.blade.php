@@ -82,7 +82,7 @@
                 <form action="{{ route('tasks.assign',$task) }}" method="POST" class="d-flex gap-1">
                     @csrf
                     <select name="user_id" class="form-select form-select-sm" style="width: 120px;">
-                        <option value="">-- Assign --</option>
+                        <option value="">{{ $task->assignedTo ? 'Unassign' : '-- Assign --' }}</option>
                         @foreach($staff as $s)
                             <option value="{{ $s->id }}" {{ $task->assignedTo?->id == $s->id ? 'selected' : '' }}>
                                 {{ $s->name }}

@@ -136,12 +136,19 @@ class TaskController extends Controller
     public function assign(Request $request, Task $task)
     {
         $data = $request->validate([
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'nullable|exists:users,id',
         ]);
 
-        $task->assigned_to = $data['user_id'];
-        $task->assigned_by = Auth::user()->id;
-        $task->status = 'pending';
+        if (empty($data['user_id'])) {
+            $task->assigned_to = null;
+            $task->assigned_by = null;
+            $task->status = 'pending'; // or 'not_assigned' if you prefer
+        } else {
+            $task->assigned_to = $data['user_id'];
+            $task->assigned_by = Auth::user()->id;
+            $task->status = 'pending';
+        }
+        
         $task->save();
 
         return redirect()->route('tasks.index')->with('success', 'Task assigned successfully.');
