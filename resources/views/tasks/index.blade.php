@@ -73,11 +73,17 @@
                 <a href="{{ route('tasks.show',$task) }}" class="btn btn-outline-secondary btn-sm">View</a>
                 <a href="{{ route('tasks.edit',$task) }}" class="btn btn-outline-primary btn-sm">Edit</a>
 
-                <form action="{{ route('tasks.destroy',$task) }}" method="POST" style="display:inline">
+                <form id="delete-form-{{ $task->id }}" action="{{ route('tasks.destroy',$task) }}" method="POST" style="display:inline">
                     @csrf
                     @method('DELETE')
-                    <button class="btn btn-outline-danger btn-sm">Delete</button>
                 </form>
+                <button class="btn btn-outline-danger btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteModal"
+                    data-task-id="{{ $task->id }}"
+                    data-task-title="{{ $task->title }}">
+                    Delete
+                </button>
 
                 <form action="{{ route('tasks.assign',$task) }}" method="POST" class="d-flex gap-1">
                     @csrf
@@ -102,5 +108,38 @@
 <div class="mt-3">
     {{ $tasks->links() }}
 </div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete <strong id="deleteTaskTitle"></strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // When the modal is about to be shown, populate it with the correct task info
+    document.getElementById('deleteModal').addEventListener('show.bs.modal', function (e) {
+        const trigger = e.relatedTarget;
+        const taskId = trigger.getAttribute('data-task-id');
+        const taskTitle = trigger.getAttribute('data-task-title');
+
+        document.getElementById('deleteTaskTitle').textContent = taskTitle;
+
+        document.getElementById('confirmDeleteBtn').onclick = function () {
+            document.getElementById('delete-form-' + taskId).submit();
+        };
+    });
+</script>
 
 @endsection
