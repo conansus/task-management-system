@@ -43,7 +43,7 @@
         <td>{{ $user->email }}</td>
         <td>{{ strtoupper($user->role) }}</td>
         <td>
-            <div class="d-flex gap-1">
+            <div class="d-flex align-items-center justify-content-center gap-1 flex-wrap">
                 <a href="{{ route('users.show', $user) }}" class="btn btn-outline-secondary btn-sm">View</a>
                 <a href="{{ route('users.edit', $user) }}" class="btn btn-outline-primary btn-sm">Edit</a>
 
