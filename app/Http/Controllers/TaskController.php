@@ -14,7 +14,6 @@ class TaskController extends Controller
     {
         $query = Task::query()->with(['assignedTo', 'assignedBy', 'createdBy']);
 
-        // 🔍 Search
         if ($request->filled('search')) {
             $search = $request->search;
 
@@ -49,7 +48,7 @@ class TaskController extends Controller
                 ->select('tasks.*');
         }
 
-        $tasks = $query->paginate(5)->withQueryString();
+        $tasks = $query->paginate(5)->withQueryString(); //here will preserve the querys in url
 
         $staff = User::where('role','staff')->get();
 
