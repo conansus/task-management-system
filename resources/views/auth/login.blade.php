@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+<div class="row justify-content-center" style="min-height: 80vh;">
     <div class="col-md-6">
 
-        <div class="card shadow-lg border-0 rounded-4">
+        <div class="card shadow-lg border-0 rounded-4" style="margin-top: 7rem">
             <div class="card-body p-4">
 
                 <h3 class="text-center mb-4 fw-bold">Login</h3>
