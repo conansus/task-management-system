@@ -17,60 +17,60 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-
-        $admin = User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@test.com',
+        // Create 2 admins
+        $admins = [];
+        $admins[] = User::create([
+            'name'     => 'Admin One',
+            'email'    => 'admin1@test.com',
             'password' => Hash::make('password'),
-            'role' => 'admin',
+            'role'     => 'admin',
         ]);
-
-        $staff1 = User::create([
-            'name' => 'Staff One',
-            'email' => 'staff1@test.com',
+        $admins[] = User::create([
+            'name'     => 'Admin Two',
+            'email'    => 'admin2@test.com',
             'password' => Hash::make('password'),
-            'role' => 'staff',
+            'role'     => 'admin',
         ]);
 
-        $staff2 = User::create([
-            'name' => 'Staff Two',
-            'email' => 'staff2@test.com',
-            'password' => Hash::make('password'),
-            'role' => 'staff',
-        ]);
+        // Create 5 staff
+        $staffs = [];
+        for ($i = 1; $i <= 5; $i++) {
+            $staffs[] = User::create([
+                'name'     => "Staff $i",
+                'email'    => "staff$i@test.com",
+                'password' => Hash::make('password'),
+                'role'     => 'staff',
+            ]);
+        }
 
-        Task::create([
-            'title' => 'Prepare Report',
-            'description' => 'Monthly report',
-            'priority' => 'high',
-            'status' => 'pending',
-            'created_by' => $admin->id,
-            'assigned_to' => $staff1->id,
-            'assigned_by' => $admin->id,
-        ]);
+        // Task data pool to pick from randomly
+        $titles = [
+            'Prepare Monthly Report', 'Fix Login Bug', 'Update User Dashboard',
+            'Write Unit Tests', 'Review Pull Request', 'Deploy to Staging',
+            'Database Backup', 'Send Client Invoice', 'Update Documentation',
+            'Refactor Auth Module', 'Design New Landing Page', 'Fix Payment Gateway',
+            'Setup CI/CD Pipeline', 'Migrate Old Data', 'Conduct Code Review',
+            'Optimize Slow Queries', 'Handle Support Ticket', 'Update Dependencies',
+            'Write API Docs', 'Test Mobile Responsiveness',
+        ];
 
-        Task::create([
-            'title' => 'Fix Bug',
-            'description' => 'System bug fix',
-            'priority' => 'medium',
-            'status' => 'in_progress',
-            'created_by' => $admin->id,
-            'assigned_to' => $staff2->id,
-            'assigned_by' => $admin->id,
-        ]);
+        $priorities = ['low', 'medium', 'high'];
+        $statuses   = ['pending', 'in_progress', 'complete'];
 
-        Task::create([
-            'title' => 'Unassigned Task',
-            'description' => 'No one assigned yet',
-            'priority' => 'low',
-            'status' => 'not_assigned',
-            'created_by' => $admin->id,
-        ]);
+        foreach ($titles as $i => $title) {
+            $admin      = $admins[array_rand($admins)];
+            $staff      = $staffs[array_rand($staffs)];
+            $isAssigned = rand(0, 1); // 50/50 chance of being assigned
+
+            Task::create([
+                'title'       => $title,
+                'description' => "Description for: $title",
+                'priority'    => $priorities[array_rand($priorities)],
+                'status'      => $isAssigned ? $statuses[array_rand($statuses)] : 'not_assigned',
+                'created_by'  => $admin->id,
+                'assigned_to' => $isAssigned ? $staff->id : null,
+                'assigned_by' => $isAssigned ? $admin->id : null,
+            ]);
+        }
     }
 }
